@@ -1,0 +1,4 @@
+﻿  project2.cpp
+\\Mac\Home\Desktop\project2\project2.cpp(37,47): warning C4244: +=: преобразование "double" в "int", возможна потеря данных
+\\Mac\Home\Desktop\project2\project2.cpp(85,33): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
+  project2.vcxproj -> \\Mac\Home\Desktop\project2\x64\Debug\project2.exe

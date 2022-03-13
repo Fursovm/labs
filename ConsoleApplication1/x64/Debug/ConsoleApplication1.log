@@ -1,0 +1,8 @@
+﻿  ConsoleApplication1.cpp
+\\Mac\Home\Desktop\IT\С\ConsoleApplication1\ConsoleApplication1.cpp(51,19): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+\\Mac\Home\Desktop\IT\С\ConsoleApplication1\ConsoleApplication1.cpp(43,9): warning C4101: flag: неиспользованная локальная переменная
+\\Mac\Home\Desktop\IT\С\ConsoleApplication1\ConsoleApplication1.cpp(468,29): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+\\Mac\Home\Desktop\IT\С\ConsoleApplication1\ConsoleApplication1.cpp(479,32): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+\\Mac\Home\Desktop\IT\С\ConsoleApplication1\ConsoleApplication1.cpp(508,11): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+\\Mac\Home\Desktop\IT\С\ConsoleApplication1\ConsoleApplication1.cpp(509,11): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+  ConsoleApplication1.vcxproj -> \\Mac\Home\Desktop\IT\С\ConsoleApplication1\x64\Debug\ConsoleApplication1.exe

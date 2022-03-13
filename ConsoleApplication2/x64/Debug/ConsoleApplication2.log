@@ -1,0 +1,4 @@
+﻿  ConsoleApplication2.cpp
+\\Mac\Home\Desktop\IT\С\ConsoleApplication2\ConsoleApplication2.cpp(495,2): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+\\Mac\Home\Desktop\IT\С\ConsoleApplication2\ConsoleApplication2.cpp(496,21): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+  ConsoleApplication2.vcxproj -> \\Mac\Home\Desktop\IT\С\ConsoleApplication2\x64\Debug\ConsoleApplication2.exe

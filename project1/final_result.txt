@@ -1,0 +1,10 @@
+Locality Dnipro was found in the file places.txt
+Its population is 992499
+
+The whole file places.txt:
+Dnipro	992499
+Kyiv	2966278
+Chernivtsi	262276
+Zelenodolsk	13056
+Kharkiv	1446107
+Odessa	993120
