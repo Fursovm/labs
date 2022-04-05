@@ -1,2 +1,0 @@
-\\Mac\Home\Desktop\project1\x64\Debug\project1.exe
-\\Mac\Home\Desktop\Visual Studio\project1\x64\Debug\project1.exe
