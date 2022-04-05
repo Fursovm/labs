@@ -136,7 +136,7 @@ char* Worker::GetName(char name[], int num)
 	{
 		for (int i = 0; i < num - 1; i++)
 			name[i] = _name[i];
-		name[num] = '\0';
+		name[num - 1] = '\0';
 	}
 	return name;
 }
