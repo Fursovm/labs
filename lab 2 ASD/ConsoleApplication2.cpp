@@ -1,4 +1,4 @@
-﻿#define _CRT_SECURE_NO_WARNINGS
+#define _CRT_SECURE_NO_WARNINGS
 #include "stdlib.h"
 #include "stdio.h"
 #include "conio.h"
@@ -100,7 +100,7 @@ int main() {
 		}
 		default: {
 			printf("Ви ввели некоректне значення, спробуйте ще раз!\n");
-			flag = true;
+			flag = false;
 			continue;
 		}
 		}
