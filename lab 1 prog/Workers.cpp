@@ -131,14 +131,7 @@ char* Worker::GetName()
 */
 char* Worker::GetName(char name[], int num)
 {
-	if (num >= strlen(_name) + 1)
-		strcpy(name, _name);
-	else
-	{
-		for (int i = 0; i < num - 1; i++)
-			name[i] = _name[i];
-		name[num - 1] = '\0';
-	}
+	strcpy_s(name, num, _name);
 	return name;
 }
 

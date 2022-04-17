@@ -34,11 +34,11 @@ int main()
 	printf("Вік: %d\n", worker6.GetAge());
 	printf("Стаж роботи: %d\n\n", worker6.GetExperience());
 
-	Worker worker7("Владлєн", 48, 22);
-	char name[5];
-	worker7.GetName(name, 5);
+	Worker worker7;
 
-	printf("Ім'я: %s\n", name);
+	worker7.Set("Владлєн", 20, 1);
+
+	worker7.Print();
 
 	_getch();
 
