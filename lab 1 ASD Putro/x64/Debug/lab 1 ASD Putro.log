@@ -1,0 +1,5 @@
+﻿  lab 1 ASD Putro.cpp
+\\Mac\Home\Desktop\IT\С++\lab 1 ASD Putro\lab 1 ASD Putro.cpp(43,15): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+\\Mac\Home\Desktop\IT\С++\lab 1 ASD Putro\lab 1 ASD Putro.cpp(347,21): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+\\Mac\Home\Desktop\IT\С++\lab 1 ASD Putro\lab 1 ASD Putro.cpp(455,11): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+\\Mac\Home\Desktop\IT\С++\lab 1 ASD Putro\lab 1 ASD Putro.cpp(456,11): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
