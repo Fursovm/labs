@@ -18,12 +18,12 @@
     <ClCompile Include="lab 2 prog.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="Set.cpp">
+    <ClCompile Include="MyClass.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Set.h">
+    <ClInclude Include="MyClass.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>

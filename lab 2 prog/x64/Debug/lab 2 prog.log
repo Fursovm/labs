@@ -1,6 +1,2 @@
 ﻿  lab 2 prog.cpp
-  Set.cpp
-\\Mac\Home\Desktop\IT\С++\lab 2 prog\Set.cpp(99,29): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
-\\Mac\Home\Desktop\IT\С++\lab 2 prog\Set.cpp(352,22): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
-  Создание кода...
   lab 2 prog.vcxproj -> \\Mac\Home\Desktop\IT\С++\lab 2 prog\x64\Debug\lab 2 prog.exe
