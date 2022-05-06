@@ -9,8 +9,7 @@
 
 /* структура з даними службовцяя */
 struct tPerson {
-	char surname[30];
-	char name[30];
+	char surname[20];
 };
 
 /* структура вузла стека */
@@ -58,7 +57,7 @@ int main() {
 	printf("Стек створено!\n");
 
 	do {
-		printf("1)Заповнити стек з існуючого файлу (прізвище ім'я вік);\n2)Створити новий файл;\n");
+		printf("1)Заповнити стек з існуючого файлу (прізвище);\n2)Заповнити стек с нуля;\n3)Зповнити стек випадковими літерами;\n");
 		Enter(workWithStack); //зчитування пункту меню
 
 		switch (workWithStack) {
@@ -68,10 +67,8 @@ int main() {
 			FopenCheck(fr, filename, 'r'); //вiдкриття файлу, та перевірка на помилки
 
 			while (fgets(string, 50, fr)) {
-				if (GetPerson(string, &person) == 1) { //заносимо дані з файлу до структури з перевіркою
-					printf("Елементи повинні бути у вигляді <прізвище ім'я>!");
-					return 2;
-				}
+				
+				GetPerson(string, &person);  //заносимо дані з файлу до структури
 
 				int check = PushStack(sd, &person); //розміщуємо в стеку
 
@@ -88,13 +85,31 @@ int main() {
 				return 1;
 			}
 
-			FopenCheck(fr, filename, 'a');
 			break;
 		}
 		case 2: {
-			printf("Введіть назву файлу у вигляді name.txt:\n");
-			CheckFilename(filename); //перевірка правильності введення назви файла
-			FopenCheck(fr, filename, 'w'); //вiдкриття файлу, та перевірка на помилки
+			break;
+		}
+		case 3: {
+			printf("Введіть кількість елементів:\n");
+			int elementNum;
+			int j;
+			Enter(elementNum);
+			for (int i = 0; i < elementNum; i++)
+			{
+				int letterNum = 2 + rand() % 18;
+				for (j = 0; j < letterNum; j++)
+				{
+					person.surname[j] = ('a' + rand() % ('z' - 'a'));
+				}
+
+				if (person.surname[j] != '\0') {
+					person.surname[j] = '\0';
+				}
+
+				PushStack(sd, &person);
+			}
+
 			break;
 		}
 		default: {
@@ -107,18 +122,11 @@ int main() {
 
 	for (;;) {
 
-		printf("\nВиберіть тип роботи зі стеком:\n1)Розмістити елемент в стеку;\n2)Зчитування елемента зі стека з видаленням;\n3)Отримати поточний розмір стека;\n4)Відобразити вміст стека на екрані;\n0)Завершити програму;\n");
+		printf("\nВиберіть тип роботи зі стеком:\n1)Розмістити елемент в стеку;\n2)Зчитування елемента зі стеку з видаленням;\n3)Отримати поточний розмір стеку;\n4)Заповнити файл із стеку і вивести його на констоль;\n5)Видалити всі елементи стека;\n6)Заповнити стек з файлу;\n0)Завершити програму;\n");
 		Enter(workWithStack); //зчитування пункту меню
 
 		switch (workWithStack) {
 		case 0: {
-			fclose(fr);
-
-			if (ferror(fr)) {
-				printf("Помилка при закритті файлу %s", filename);
-				return 1;
-			}
-
 			DestroyStack(sd); //видалення стека
 
 			printf("\nСтек видалено!\n");
@@ -135,12 +143,6 @@ int main() {
 				break;
 			}
 
-			if (!fprintf(fr, "%s %s\n", person.surname, person.name)) //записуємо введену структуру у файл
-			{
-				printf("Виникла помилка запису структури у файл!\n");
-				return 1;
-			}
-
 			break;
 		}
 		case 2: {
@@ -151,31 +153,7 @@ int main() {
 				break;
 			}
 
-			tPerson* helpPerson = (tPerson*)calloc(sd->size, sizeof(tPerson)); //ініциалізуємо динамічний допоміжний масив
-			int currentSize = sd->size;
-			for (int i = sd->size - 1; i >= 0; i--) { //видалення та переносення даних в допоміжний масив
-				PopStack(sd, &helpPerson[i]);
-			}
-
-			fclose(fr);
-
-			if (ferror(fr)) {
-				printf("Помилка при закритті файлу %s", filename);
-				return 1;
-			}
-
-			FopenCheck(fr, filename, 'w'); //закриття і відкриття файлу для очищення
-
-			for (int i = 0; i < currentSize; i++) { //перенесення даних в стек та файл
-				PushStack(sd, &helpPerson[i]);
-				if (!fprintf(fr, "%s %s\n", helpPerson[i].surname, helpPerson[i].name))
-				{
-					printf("Виникла помилка запису структури у файл!\n");
-					return 1;
-				}
-			}
-
-			free(helpPerson);
+			
 			Print(&person); //виводення видаленого масиву на консоль
 			printf("Елемент видалено!\n\n");
 			break;
@@ -185,6 +163,27 @@ int main() {
 			break;
 		}
 		case 4: {
+			printf("Введіть назву файлу у вигляді name.txt, в який бажаєте записати стек:\n");
+			CheckFilename(filename); //перевірка правильності введення назви файла
+			FopenCheck(fr, filename, 'w'); //вiдкриття файлу, та перевірка на помилки
+
+			tPerson* helpPerson = (tPerson*)calloc(sd->size, sizeof(tPerson)); //ініциалізуємо динамічний допоміжний масив
+			int currentSize = sd->size;
+			for (int i = sd->size - 1; i >= 0; i--) { //видалення та переносення даних в допоміжний масив
+				PopStack(sd, &helpPerson[i]);
+			}
+
+			for (int i = 0; i < currentSize; i++) { //перенесення даних в стек та файл
+				PushStack(sd, &helpPerson[i]);
+				if (!fprintf(fr, "%s\n", helpPerson[i].surname))
+				{
+					printf("Виникла помилка запису структури у файл!\n");
+					return 1;
+				}
+			}
+
+			free(helpPerson);
+
 			fclose(fr);
 
 			if (ferror(fr)) {
@@ -195,6 +194,7 @@ int main() {
 			FopenCheck(fr, filename, 'r');
 
 			int i = 1;
+			printf("\n");
 			while (fgets(string, 50, fr)) { //виводимо файл на екран
 				printf("[%d]: %s", i++, &string);
 			}
@@ -206,7 +206,41 @@ int main() {
 				return 1;
 			}
 
-			FopenCheck(fr, filename, 'a');
+			break;
+		}
+		case 5: {
+			while (sd->size != 0) {
+				PopStack(sd, &person);
+			}
+			printf("Всі елементи стеку видалені!\n");
+			break;
+		}
+		case 6: {
+			while (sd->size != 0) {
+				PopStack(sd, &person);
+			}
+			printf("Введіть назву файлу у вигляді name.txt, з якого бажаєте зчитати дані:\n");
+			CheckFilename(filename); //перевірка правильності введення назви файла
+			FopenCheck(fr, filename, 'r'); //вiдкриття файлу, та перевірка на помилки
+
+			while (fgets(string, 50, fr)) {
+
+				GetPerson(string, &person);  //заносимо дані з файлу до структури
+
+				int check = PushStack(sd, &person); //розміщуємо в стеку
+
+				if (check == -1) {
+					printf("Не вистачає пам'яті (стек повний)!");
+					return 1;
+				}
+			}
+
+			fclose(fr);
+
+			if (ferror(fr)) {
+				printf("Помилка при закритті файлу %s", filename);
+				return 1;
+			}
 			break;
 		}
 		default: {
@@ -323,21 +357,6 @@ void Input(tPerson* person) {
 		}
 
 	} while (person->surname[0] == '\n' && strlen(person->surname) > 20);
-
-	do {
-		printf("Ім'я: ");
-		gets_s(person->name);
-
-		if (person->name[0] == '\n')
-		{
-			printf("Ви нічого не ввели, спробуйте ще раз!\n");
-		}
-
-		if (strlen(person->name) > 20) {
-			printf("Не вистачає пам'яті, спробуйте ще раз!\n");
-		}
-
-	} while (person->name[0] == '\n' && strlen(person->name) > 20);
 }
 
 /*Функція виведення стека на екран
@@ -345,7 +364,7 @@ void Input(tPerson* person) {
 Змінна структурного типу
 */
 void Print(const tPerson* person) {
-	printf("Прізвище: %s\nІм'я: %s\n", person->surname, person->name);
+	printf("Прізвище: %s\n", person->surname);
 }
 
 /*Функція введення значень змінних
@@ -434,59 +453,19 @@ void FopenCheck(FILE*& fp, char filename[], char d) {
 Змінна структурного типу, в яку будуть занесені дані
 */
 int GetPerson(char line[], tPerson* person) {
-	int w = 0;
 	int k = 0;
 
-	for (int i = w;; i++) {
-		if (line[i] >= 'A' && line[i] <= 'Z' || line[i] >= 'a' && line[i] <= 'z') {
-			w = i;
-			for (int j = i;; j++) {
-				if (line[j] == ' ') {
-					w++;
-					break;
-				}
-				else {
-					person->surname[k] = line[i];
-					i++;
-					k++;
-					w++;
-				}
-			}
+	for (int j = 0;; j++) {
+		if (line[j] == '\n' || line[j] == '\0')
 			break;
+		else {
+			person->surname[k] = line[j];
+			k++;
 		}
-		else
-			return 1;
 	}
 
 	if (person->surname[k] != '\0') {
 		person->surname[k] = '\0';
-	}
-
-	k = 0;
-
-	for (int i = w;; i++) {
-		if (line[i] >= 'A' && line[i] <= 'Z' || line[i] >= 'a' && line[i] <= 'z') {
-			w = i;
-			for (int j = i;; j++) {
-				if (line[j] == ' ') {
-					w++;
-					break;
-				}
-				else {
-					person->name[k] = line[i];
-					i++;
-					k++;
-					w++;
-				}
-			}
-			break;
-		}
-		else
-			return 1;
-	}
-
-	if (person->name[k] != '\0') {
-		person->name[k] = '\0';
 	}
 
 	return 0;
