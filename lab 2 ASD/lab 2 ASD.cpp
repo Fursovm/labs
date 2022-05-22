@@ -7,7 +7,7 @@
 #include "string.h"
 #include "windows.h"
 
-/* структура з даними службовцяя */
+/* структура з даними службовця */
 struct tWorker {
 	char surname[30];
 	char name[30];
@@ -35,38 +35,65 @@ void Input(tWorker* worker);
 void Print(const tWorker* worker);
 int Enter(int& N);
 void CheckFilename(char filename[]);
-void FopenCheck(FILE*& fp, char filename[], char d);
 int GetWorker(char line[], tWorker* worker);
 
 int main() {
+	tSD* sd = NULL;
 	FILE* fr = NULL; //файловий дескриптор для встановлення потоку з файлом
 	tWorker worker; //змінна структурного типу для передачі даних в стек
 	int workWithStack; //змінна пункту меню
 	char filename[50]; //рядок з назвою файлу
 	char string[50]; //масив для переписування рядків по одному з файлу
-	bool flag = true; //змінна для повторного вводу пункту меню
+	bool flag = true;
 
 	SetConsoleCP(1251); //підключення кирилиці
 	SetConsoleOutputCP(1251);
 
-	tSD* sd = CreateStack(); //створюємо стек
-
-	if (sd == NULL) {
-		printf("Cтек не створений!");
-		return 1;
-	}
-
-	printf("Стек створено!\n");
-
-	do {
-		printf("1)Заповнити стек з існуючого файлу (прізвище ім'я вік);\n2)Створити новий файл;\n");
+	for (;;) {
+		printf("1)Створити новий файл;\n2)Заповнити стек з існуючого файлу (прізвище ім'я вік);\n3)Створити новий стек;\n4)Додати елемент у стек;\n5)Прочитати стек;\n6)Показати зміст стека і його розмір;\n7)Заповнити файл із стеку;\n0)Завершити роботу;\n");
 		Enter(workWithStack); //зчитування пункту меню
 
 		switch (workWithStack) {
-		case 1: {
+		case 1: { // створення нового файлу для стека
+			if (sd == NULL) {
+				printf("Cтек не існує!\n");
+				continue;
+			}
+
+			printf("Введіть назву файлу у вигляді name.txt:\n");
+			CheckFilename(filename); //перевірка правильності введення назви файла
+
+			if ((fr = fopen(filename, "w")) == NULL)
+			{
+				printf("Виникла помилка при відкритті файлу %s! \n", filename);
+				exit(0);
+			}
+
+			printf("\nСтворено новий файл для стеку\n");
+
+			fclose(fr);
+
+			if (ferror(fr)) {
+				printf("Помилка при закритті файлу %s", filename);
+				return 1;
+			}
+
+			break;
+		}
+		case 2: { // заповнення стеку з існуючого файлу
+			if (sd == NULL) {
+				printf("Cтек не існує\n!");
+				continue;
+			}
+
 			printf("Введіть назву файлу у вигляді name.txt, з якого бажаєте зчитати дані:\n");
 			CheckFilename(filename); //перевірка правильності введення назви файла
-			FopenCheck(fr, filename, 'r'); //вiдкриття файлу, та перевірка на помилки
+
+			if ((fr = fopen(filename, "r")) == NULL)
+			{
+				printf("Виникла помилка при відкритті файлу %s! \n", filename);
+				exit(0);
+			}
 
 			while (fgets(string, 50, fr)) {
 				if (GetWorker(string, &worker) == 1) { //заносимо дані з файлу до структури з перевіркою
@@ -82,6 +109,8 @@ int main() {
 				}
 			}
 
+			printf("\nСтек заповнено з існуючого файлу\n");
+
 			fclose(fr);
 
 			if (ferror(fr)) {
@@ -89,83 +118,118 @@ int main() {
 				return 1;
 			}
 
-			FopenCheck(fr, filename, 'a');
+			if ((fr = fopen(filename, "a")) == NULL)
+			{
+				printf("Виникла помилка при відкритті файлу %s! \n", filename);
+				exit(0);
+			}
+
 			break;
 		}
-		case 2: {
-			printf("Введіть назву файлу у вигляді name.txt:\n");
-			CheckFilename(filename); //перевірка правильності введення назви файла
-			FopenCheck(fr, filename, 'w'); //вiдкриття файлу, та перевірка на помилки
-			break;
-		}
-		default: {
-			printf("Ви ввели некоректне значення, спробуйте ще раз!\n");
-			flag = false;
-			continue;
-		}
-		}
-	} while (!flag);
+		case 3: { // створення стеку
+			if (sd) {
+				DestroyStack(sd);
+				//continue;
+			}
 
-	for (;;) {
+			sd = CreateStack(); //створюємо стек
 
-		printf("\nВиберіть тип роботи зі стеком робітників:\n1)Розмістити елемент в стеку;\n2)Зчитування елемента зі стека з видаленням;\n3)Отримати поточний розмір стека;\n4)Відобразити вміст стека на екрані;\n0)Завершити програму;\n");
-		Enter(workWithStack); //зчитування пункту меню
-
-		switch (workWithStack) {
-		case 0: {
-			fclose(fr);
-
-			if (ferror(fr)) {
-				printf("Помилка при закритті файлу %s", filename);
+			if (sd == NULL) {
+				printf("Cтек не створений!");
 				return 1;
 			}
 
-			DestroyStack(sd); //видалення стека
+			printf("Стек створено!\n");
 
-			printf("\nСтек видалено!\n");
-
-			printf("Робота програми завершена!\n");
-			return 0;
+			break;
 		}
-		case 1: {
+		case 4: { // додання елементу у стек
+			if (sd == NULL) {
+				printf("Cтек не існує!\n");
+				continue;
+			}
+
 			Input(&worker); //введення даних в структуку
-			int check = PushStack(sd, &worker); //додання структури до стека з перевіркою
 
+			int check = PushStack(sd, &worker); //додання структури до стека з перевіркою
 			if (check == -1) {
 				printf("\nНе вистачає пам'яті (стек повний)!\n");
 				break;
 			}
 
-			if (!fprintf(fr, "%s %s %d\n", worker.surname, worker.name, worker.age)) //записуємо введену структуру у файл
-			{
-				printf("Виникла помилка запису структури у файл!\n");
-				return 1;
-			}
-
 			break;
 		}
-		case 2: {
-			int check = PopStack(sd, &worker);
+		case 5: { // прочитати стек
+			if (sd == NULL) {
+				printf("Cтек не існує!\n");
+				continue;
+			}
 
+			int check = PopStack(sd, &worker);
 			if (check == -3) {
-				printf("\nCтек вже порожній!\n");
+				printf("\nCтек порожній!\n");
 				break;
 			}
 
+			Print(&worker); //виведення видаленого масиву на консоль
+			printf("Елемент видалено!\n\n");
+
+			break;
+		}
+		case 6: { // показати зміст стека та його розмір
+			if (sd == NULL) {
+				printf("Cтек не існує!\n");
+				continue;
+			}
+
 			tWorker* helpWorker = (tWorker*)calloc(sd->size, sizeof(tWorker)); //ініциалізуємо динамічний допоміжний масив
+			if (!helpWorker) {
+				printf("Не вистачає пам'яті!\n");
+				return 1;
+			}
+
+			int currentSize = sd->size;
+			for (int i = sd->size - 1; i >= 0; i--) { //видалення та перенесення даних в допоміжний масив
+				PopStack(sd, &helpWorker[i]);
+			}
+
+			for (int i = 0; i < currentSize; i++) { //перенесення даних в стек та файл
+				PushStack(sd, &helpWorker[i]);
+				if (!fprintf(stdout, "%s %s %d\n", helpWorker[i].surname, helpWorker[i].name, helpWorker[i].age))
+				{
+					printf("Виникла помилка запису структури у файл!\n");
+					return 1;
+				}
+			}
+			free(helpWorker);
+
+			printf("\nПоточний розмір стеку (в елементах) - %d \n\n", sd->size);
+
+			break;
+		}
+		case 7: { // заповнення файлу з стеку
+			if (sd == NULL) {
+				printf("Cтек не існує!\n");
+				continue;
+			}
+			printf("Введіть назву файлу у вигляді name.txt, в який бажаєте записати стек:\n");
+			CheckFilename(filename); //перевірка правильності введення назви файла
+			if ((fr = fopen(filename, "w")) == NULL)
+			{
+				printf("Виникла помилка при відкритті файлу %s! \n", filename);
+				exit(0);
+			}
+
+			tWorker* helpWorker = (tWorker*)calloc(sd->size, sizeof(tWorker)); //ініциалізуємо динамічний допоміжний масив
+			if (!helpWorker) {
+				printf("Не вистачає пам'яті!\n");
+				return 1;
+			}
+
 			int currentSize = sd->size;
 			for (int i = sd->size - 1; i >= 0; i--) { //видалення та переносення даних в допоміжний масив
 				PopStack(sd, &helpWorker[i]);
 			}
-
-			fclose(fr);
-
-			if (ferror(fr)) {
-				printf("Помилка при закритті файлу %s", filename);
-				return 1;
-			}
-
-			FopenCheck(fr, filename, 'w'); //закриття і відкриття файлу для очищення
 
 			for (int i = 0; i < currentSize; i++) { //перенесення даних в стек та файл
 				PushStack(sd, &helpWorker[i]);
@@ -177,28 +241,6 @@ int main() {
 			}
 
 			free(helpWorker);
-			Print(&worker); //виводення видаленого масиву на консоль
-			printf("Елемент видалено!\n\n");
-			break;
-		}
-		case 3: {
-			printf("\nПоточний розмір стеку (в елементах) - %d \n\n", sd->size);
-			break;
-		}
-		case 4: {
-			fclose(fr);
-
-			if (ferror(fr)) {
-				printf("Помилка при закритті файлу %s", filename);
-				return 1;
-			}
-
-			FopenCheck(fr, filename, 'r');
-
-			int i = 1;
-			while (fgets(string, 50, fr)) { //виводимо файл на екран
-				printf("[%d]: %s", i++, &string);
-			}
 
 			fclose(fr);
 
@@ -207,27 +249,34 @@ int main() {
 				return 1;
 			}
 
-			FopenCheck(fr, filename, 'a');
+			break;
+		}
+		case 0: { // завершення роботи
+			if (DestroyStack(sd) == -2)
+				printf("\nСтек не існує!\n");
+			if (DestroyStack(sd) == 0)
+				printf("\nСтек видалено!\n");
+			printf("\nРобота програми завершена!\n");
+			return 0;
+
 			break;
 		}
 		default: {
 			printf("Ви ввели некоректне значення, спробуйте ще раз!\n");
+			flag = false;
 			continue;
 		}
 		}
-
-
-	}
+	} while (!flag);
 }
-
 /*Функція створення стека
+Вхід:
+Відсутній
 Вихід:
 Адреса на створений стек
 */
 tSD* CreateStack(void) {
-	tSD* sd;
-	sd = (tSD*)malloc(sizeof(tSD));
-
+	tSD* sd = (tSD*)malloc(sizeof(tSD));
 	if (!sd)
 		return NULL;   /* стек не створений */
 
@@ -242,6 +291,8 @@ tSD* CreateStack(void) {
 Вхід:
 Адреса на стек
 Елемент, який буде доданий до стека
+Вихід:
+Ціле число, як результат виконання функції
 */
 int PushStack(tSD* sd, const tWorker* worker) {
 	tStackNode* sn; /* покажчик на новий елемент */
@@ -263,6 +314,8 @@ int PushStack(tSD* sd, const tWorker* worker) {
 Вхід:
 Адреса на стек
 Змінна, в яку запишеться видалений елемент
+Вихід:
+Ціле число, як результат виконання функції
 */
 int PopStack(tSD* sd, tWorker* worker) {
 	tStackNode* pDel; /* адреса "виштовхуємого" вузла */
@@ -287,12 +340,15 @@ int PopStack(tSD* sd, tWorker* worker) {
 /*Функція видалення стека
 Вхід:
 Адреса на стек, який буде видалений
+Вихід:
+Ціле число, як результат виконання функції
 */
 int DestroyStack(tSD* sd) {
 	tStackNode* pDel; /* адреса тимчасового елемента стека */
 
-	if (!sd) /* стек не існує */
+	if (!sd) {  /* стек не існує */
 		return -2;
+	}
 
 	/* якщо стек не порожній - спершу слід видалити всі елементи! */
 	while (sd->top) { /* обхід елементів стека */
@@ -308,6 +364,8 @@ int DestroyStack(tSD* sd) {
 /*Функція введеня значень до стека з перевіркою
 Вхід:
 Змінна структурного типу
+Вихід:
+Відсутній
 */
 void Input(tWorker* worker) {
 	do {
@@ -347,6 +405,8 @@ void Input(tWorker* worker) {
 /*Функція виведення стека на екран
 Вхід:
 Змінна структурного типу
+Вихід:
+Відсутній
 */
 void Print(const tWorker* worker) {
 	printf("Прізвище: %s\nІм'я: %s\nВік: %d\n", worker->surname, worker->name, worker->age);
@@ -369,6 +429,8 @@ int Enter(int& N) {
 /*Функція для перевірки правильності введення назви файлів
 Вхід:
 Масив, у якому записана назва файлу, яку ввів користувач filename[]
+Вихід:
+Відсутній
 */
 void CheckFilename(char filename[]) {
 	int fcheck = 0; //змінна для контролю правильності вводу назви файлу користувачем
@@ -402,47 +464,22 @@ void CheckFilename(char filename[]) {
 	filename[strlen(filename) - 1] = '\0'; //змінює \n на \0
 }
 
-/*Функція вiдкриття файлу, та перевірки на помилки
-Вхід:
-Файловий дескриптор fp
-Масив, у якому записана назва файлу, яку ввів користувач filename[]
-Змінна для визначення яким способом буде відкритий файл
-*/
-void FopenCheck(FILE*& fp, char filename[], char d) {
-	if (d == 'r') {
-		if ((fp = fopen(filename, "r")) == NULL)
-		{
-			printf("Виникла помилка при відкритті файлу %s! \n", filename);
-			exit(0);
-		}
-	}
-	if (d == 'w') {
-		if ((fp = fopen(filename, "w")) == NULL)
-		{
-			printf("Виникла помилка при відкритті файлу %s! \n", filename);
-			exit(0);
-		}
-	}
-	if (d == 'a') {
-		if ((fp = fopen(filename, "a")) == NULL)
-		{
-			printf("Виникла помилка при відкритті файлу %s! \n", filename);
-			exit(0);
-		}
-	}
-}
-
 /*Функція занесення значень зі строки в структуру з перевіркою
 Вхід:
 Рядок, з якого будуть братися дані
 Змінна структурного типу, в яку будуть занесені дані
+Вихід:
+Ціле число, як результат виконання функції
 */
 int GetWorker(char line[], tWorker* worker) {
 	int w = 0;
 	int k = 0;
 
+	SetConsoleCP(1251); //підключення кирилиці
+	SetConsoleOutputCP(1251);
+
 	for (int i = w;; i++) {
-		if (line[i] >= 'A' && line[i] <= 'Z' || line[i] >= 'a' && line[i] <= 'z') {
+		if (line[i] >= 'А' && line[i] <= 'Я' || line[i] >= 'а' && line[i] <= 'я') {
 			w = i;
 			for (int j = i;; j++) {
 				if (line[j] == ' ') {
@@ -469,7 +506,7 @@ int GetWorker(char line[], tWorker* worker) {
 	k = 0;
 
 	for (int i = w;; i++) {
-		if (line[i] >= 'A' && line[i] <= 'Z' || line[i] >= 'a' && line[i] <= 'z') {
+		if (line[i] >= 'А' && line[i] <= 'Я' || line[i] >= 'а' && line[i] <= 'я') {
 			w = i;
 			for (int j = i;; j++) {
 				if (line[j] == ' ') {

@@ -1,4 +1,4 @@
 ﻿  lab 2 ASD.cpp
-\\Mac\Home\Desktop\IT\С++\lab 2 ASD\lab 2 ASD.cpp(524,2): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
-\\Mac\Home\Desktop\IT\С++\lab 2 ASD\lab 2 ASD.cpp(525,21): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+\\Mac\Home\Desktop\IT\С++\lab 2 ASD\lab 2 ASD.cpp(561,2): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+\\Mac\Home\Desktop\IT\С++\lab 2 ASD\lab 2 ASD.cpp(562,21): warning C4244: =: преобразование "double" в "int", возможна потеря данных
   lab 2 ASD.vcxproj -> \\Mac\Home\Desktop\IT\С++\lab 2 ASD\x64\Debug\lab 2 ASD.exe

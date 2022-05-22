@@ -1,2 +1,6 @@
-﻿  lab 2 prog.cpp
+﻿  MyClass.cpp
+\\Mac\Home\Desktop\IT\С++\lab 2 prog\MyClass.cpp(83,29): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
+\\Mac\Home\Desktop\IT\С++\lab 2 prog\MyClass.cpp(336,22): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
+  lab 2 prog.cpp
+  Создание кода...
   lab 2 prog.vcxproj -> \\Mac\Home\Desktop\IT\С++\lab 2 prog\x64\Debug\lab 2 prog.exe

@@ -1,0 +1,7 @@
+﻿  lab 3 ASD.cpp
+\\Mac\Home\Desktop\IT\С++\lab 3 ASD\lab 3 ASD.cpp(91,15): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+\\Mac\Home\Desktop\IT\С++\lab 3 ASD\lab 3 ASD.cpp(487,20): warning C4129: : неизвестная escape-последовательность
+\\Mac\Home\Desktop\IT\С++\lab 3 ASD\lab 3 ASD.cpp(529,20): warning C4129: : неизвестная escape-последовательность
+\\Mac\Home\Desktop\IT\С++\lab 3 ASD\lab 3 ASD.cpp(1307,9): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+\\Mac\Home\Desktop\IT\С++\lab 3 ASD\lab 3 ASD.cpp(1315,43): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+  lab 3 ASD.vcxproj -> \\Mac\Home\Desktop\IT\С++\lab 3 ASD\x64\Debug\lab 3 ASD.exe
