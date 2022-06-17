@@ -1,6 +1,6 @@
 #include <iostream>
 #include "MyClass.h"
-#define MaxSize 35
+#define MAXSIZE 35
 #define DEBUG
 using namespace std;
 
@@ -12,13 +12,13 @@ MyClass::MyClass()
 #ifdef DEBUG //якщо ми ідентифікували DEBUG, то виконується все до #endif та після нього
 	cout << "\n\nВикликався конструктор за замовчуванням - " << this << "!\n\n";
 #endif 
-	if (!(_data = new char[MaxSize]))
+	if (!(_data = new char[MAXSIZE]))
 	{
 		cout << "Не вдалося виділити пам'ять задля розміщення множини!" << endl;
 		exit(0);
 	}
 	_currentSize = 0;
-	_maxSize = MaxSize;
+	_maxSize = MAXSIZE;
 }
 
 /*
@@ -32,31 +32,20 @@ MyClass::MyClass(const char* data, int size)
 #ifdef DEBUG //якщо ми ідентифікували DEBUG, то виконується все до #endif та після нього
 	cout << "\n\nВикликався конструктор з параметрами-" << this << "!\n\n";
 #endif 
-	if (strlen(data) > MaxSize)
+	if (strlen(data) != size)
 	{
-		cout << "Ємність переданої множини більша за максимальну доступну!" << endl;
 		exit(0);
 	}
 
-	if (size <0 || size > strlen(data) || size > MaxSize)
+	if (sizeUp(size))
 	{
-		cout << "Задане некоректне значення розміру множини!" << endl;
+		for (int i = 0; i < size; i++)
+		{
+			_data[i] = data[i];
+		}
+	}
+	else
 		exit(0);
-	}
-
-	if (!(_data = new char[MaxSize]))
-	{
-		cout << "Не вдалося виділити пам'ять задля розміщення множини!" << endl;
-		exit(0);
-	}
-
-	for (int i = 0; i < size; i++)
-	{
-		_data[i] = data[i];
-	}
-
-	_currentSize = size;
-	_maxSize = MaxSize;
 }
 
 /*
@@ -69,40 +58,32 @@ MyClass::MyClass(const char* data)
 #ifdef DEBUG //якщо ми ідентифікували DEBUG, то виконується все до #endif та після нього
 	cout << "\n\nВикликався спрощений конструктор з одним параметром - " << this << "!\n\n";
 #endif 
-	if (strlen(data) > MaxSize)
+	int size = strlen(data);
+	if (sizeUp(size))
 	{
-		cout << "Ємність переданої множини більша за максимальну доступну!" << endl;
-		exit(0);
-	}
-	if (!(_data = new char[MaxSize]))
-	{
-		cout << "Не вдалося виділити пам'ять задля розміщення множини!" << endl;
-		exit(0);
-	}
-
-	_currentSize = strlen(data);
-	for (int i = 0; i < _currentSize; i++)
-	{
-		_data[i] = data[i];
-	}
-
-	for (int i = 0; i < _currentSize; i++)
-	{
-		for (int j = i + 1; j < _currentSize; j++)
+		for (int i = 0; i < _currentSize; i++)
 		{
-			if (_data[i] == _data[j])
+			_data[i] = data[i];
+		}
+
+		for (int i = 0; i < _currentSize; i++)
+		{
+			for (int j = i + 1; j < _currentSize; j++)
 			{
-				for (int k = j; k < _currentSize; k++)
+				if (_data[i] == _data[j])
 				{
-					_data[k] = _data[k + 1];
+					for (int k = j; k < _currentSize; k++)
+					{
+						_data[k] = _data[k + 1];
+					}
+					j--;
+					_currentSize--;
 				}
-				j--;
-				_currentSize--;
 			}
 		}
 	}
-
-	_maxSize = MaxSize;
+	else
+		exit(0);
 }
 
 /*
@@ -117,12 +98,7 @@ MyClass::MyClass(const MyClass& other)
 #endif 
 	_currentSize = other._currentSize;
 	_maxSize = other._maxSize;
-
-	if (!(_data = new char[MaxSize]))
-	{
-		cout << "Не вдалося виділити пам'ять задля розміщення множини!" << endl;
-		exit(0);
-	}
+	_data = new char[_maxSize];
 
 	for (int i = 0; i < _currentSize; i++)
 	{
@@ -146,7 +122,6 @@ MyClass::MyClass(const MyClass& other)
 	}
 }
 
-
 /*
 Деструктор
 */
@@ -155,7 +130,45 @@ MyClass::~MyClass()
 #ifdef DEBUG //якщо ми ідентифікували DEBUG, то виконується все до та після #endif 
 	cout << "\n\nВикликався деструктор-" << this << "!\n\n" << endl;
 #endif 
-	delete[] _data;
+	//delete[] _data;
+}
+
+// Функція, що збільшує максимальной можливий розмір масиву
+int MyClass::sizeUp(int demandSize)
+{
+	char* duplicate = NULL;
+	if (_maxSize >= demandSize)
+	{
+		_currentSize = demandSize;
+		return 1;
+	}
+	else if ((_maxSize < demandSize) && (_currentSize != 0))
+	{
+		GetData(duplicate);
+		_maxSize = int((demandSize / MAXSIZE) + 1) * MAXSIZE;
+
+		delete _data;
+		_data = new char[_maxSize];
+		if (_data == NULL)
+			return 0;
+		_currentSize = demandSize;
+
+		for (int i = 0; i < _currentSize - 1; i++)
+		{
+			_data[i] = duplicate[i];
+		}
+		delete[] duplicate;
+	}
+	else
+	{
+		_maxSize = int((demandSize / MAXSIZE) + 1) * MAXSIZE;
+
+		delete[] _data;
+		_data = new char[_maxSize];
+		_currentSize = demandSize;
+	}
+	return 1;
+
 }
 
 /*
@@ -196,20 +209,24 @@ int MyClass::Print()
 Вихід:
 Вказівник на рядок з записаною множиною в ньому або вказівник на nullpointer
 */
-char* MyClass::GetData()
+int MyClass::GetData(char* data)
 {
+	if (data != NULL)
+		delete[] data;
+
+	data = new char[_maxSize];
+
 	if (_currentSize != 0)
 	{
-		char* temp = new char[_currentSize];
 		for (int i = 0; i < _currentSize; i++)
 		{
-			temp[i] = _data[i];
+			data[i] = _data[i];
 		}
-		return temp;
+		return _currentSize;
 	}
 	else
 	{
-		return NULL;
+		return 0;
 	}
 }
 
@@ -245,58 +262,35 @@ size-кількість елементів переданої множини, передача за значенням
 */
 int MyClass::SetData(const char* data, int size)
 {
-	if (strlen(data) > MaxSize)
-	{
-		cout << "Ємність переданої множини більша за максимальну доступну!" << endl;
-		exit(0);
-	}
-	if (size <0 || size > strlen(data) || size > MaxSize)
-	{
-		cout << "Задане некоректне значення розміру множини!" << endl;
-		exit(0);
-	}
-
-	if (data == nullptr)
-	{
-		printf("Ви не передали рядок з елементами для задання поля класу!\n");
+	if (strlen(data) != size)
 		return 0;
-	}
-	else
+
+	if (sizeUp(size))
 	{
-		if (_data != nullptr)
-		{
-			delete[] _data;
-		}
-
-		if (!(_data = new char[MaxSize]))
-		{
-			cout << "Не вдалося виділити пам'ять задля розміщення множини!" << endl;
-			exit(0);
-		}
-
 		for (int i = 0; i < size; i++)
 		{
 			_data[i] = data[i];
 		}
-	}
-	_currentSize = size;
 
-	for (int i = 0; i < _currentSize; i++)
-	{
-		for (int j = i + 1; j < _currentSize; j++)
+		for (int i = 0; i < _currentSize; i++)
 		{
-			if (_data[i] == _data[j])
+			for (int j = i + 1; j < _currentSize; j++)
 			{
-				for (int k = j; k < _currentSize; k++)
+				if (_data[i] == _data[j])
 				{
-					_data[k] = _data[k + 1];
+					for (int k = j; k < _currentSize; k++)
+					{
+						_data[k] = _data[k + 1];
+					}
+					j--;
+					_currentSize--;
 				}
-				j--;
-				_currentSize--;
 			}
 		}
+		return 1;
 	}
-	return 1;
+	else
+		exit(0);
 }
 
 /*
@@ -309,54 +303,39 @@ data-вказівник на константний рядок, передача за посиланням
 */
 int MyClass::SetData(const char* data)
 {
-	int size;
-	if (strlen(data) > _maxSize)
-	{
-		cout << "Ємність переданої множини більша за максимальну доступну!" << endl;
-		exit(0);
-	}
 	if (data == nullptr)
-	{
-		printf("Ви не передали рядок з елементами для задання поля класу!\n");
 		return 0;
-	}
-	else
+
+	if (_data != nullptr)
+		delete[] _data;
+
+	int size = strlen(data);
+	if (sizeUp(size))
 	{
-		if (_data != nullptr)
-		{
-			delete[] _data;
-		}
-
-		if (!(_data = new char[_maxSize]))
-		{
-			cout << "Не вдалося виділити пам'ять задля розміщення множини!" << endl;
-			exit(0);
-		}
-
-		size = strlen(data);
 		for (int i = 0; i < size; i++)
 		{
 			_data[i] = data[i];
 		}
-	}
-	_currentSize = size;
 
-	for (int i = 0; i < _currentSize; i++)
-	{
-		for (int j = i + 1; j < _currentSize; j++)
+		for (int i = 0; i < _currentSize; i++)
 		{
-			if (_data[i] == _data[j])
+			for (int j = i + 1; j < _currentSize; j++)
 			{
-				for (int k = j; k < _currentSize; k++)
+				if (_data[i] == _data[j])
 				{
-					_data[k] = _data[k + 1];
+					for (int k = j; k < _currentSize; k++)
+					{
+						_data[k] = _data[k + 1];
+					}
+					j--;
+					_currentSize--;
 				}
-				j--;
-				_currentSize--;
 			}
 		}
+		return 1;
 	}
-	return 1;
+	else
+		exit(0);
 }
 
 /*
@@ -368,54 +347,24 @@ void MyClass::SetCurrentSize(int currentSize)
 {
 	if (currentSize < 0)
 	{
-		cout << "Передане Вами значення для поточного розміру рядка не є коректним!\n";
 		exit(0);
 	}
 
-	if (currentSize > _currentSize && currentSize <= MaxSize)
+	if (sizeUp(currentSize))
 	{
-		for (int i = _currentSize; i < currentSize; i++)
+		if (currentSize > _currentSize && currentSize <= _maxSize)
 		{
-			_data[i] = ' ';
+			for (int i = _currentSize; i < currentSize; i++)
+			{
+				_data[i] = ' ';
+			}
 		}
 	}
-
-	if (currentSize > MaxSize)
-	{
-		char* tempData;
-		if (!(tempData = new char[_currentSize]))
-		{
-			cout << "Не вдалося виділити пам'ять задля тимчасового розміщення множини!" << endl;
-			exit(0);
-		}
-
-		for (int i = 0; i < _currentSize; i++)
-		{
-			tempData[i] = _data[i];
-		}
-		_maxSize = currentSize;
-		delete[] _data;
-
-		if (!(_data = new char[_maxSize]))
-		{
-			cout << "Не вдалося виділити пам'ять задля розміщення множини!" << endl;
-			exit(0);
-		}
-
-		for (int i = 0; i < _currentSize; i++)
-		{
-			_data[i] = tempData[i];
-		}
-		delete[] tempData;
-		for (int i = _currentSize; i < _maxSize; i++)
-		{
-			_data[i] = ' ';
-		}
-	}
-
-	_currentSize = currentSize;
+	else
+		exit(0);
 }
 
+//оператор для видалення елементів заданих з множини
 MyClass MyClass::operator-(char element)
 {
 	if (_data == nullptr)
@@ -473,6 +422,7 @@ MyClass MyClass::operator*(const MyClass& other)
 {
 	MyClass temp;
 	int tempSize = 0;
+	int tempMaxSize = 0;
 	int j = 0;
 
 	if (!DataCheck(other))
@@ -488,13 +438,15 @@ MyClass MyClass::operator*(const MyClass& other)
 	if (_currentSize > other._currentSize)
 	{
 		tempSize = other._currentSize;
+		tempMaxSize = other._maxSize;
 	}
 	else
 	{
 		tempSize = _currentSize;
+		tempMaxSize = _maxSize;
 	}
 
-	if (!(temp._data = new char[tempSize]))
+	if (!(temp._data = new char[tempMaxSize]))
 	{
 		cout << "Не вдалося виділити пам'ять задля тимчасового розміщення множини!" << endl;
 		exit(0);
@@ -509,20 +461,13 @@ MyClass MyClass::operator*(const MyClass& other)
 		}
 	}
 
-	_currentSize = j;
-	delete[] _data;
-
-	if (!(_data = new char[tempSize]))
-	{
-		cout << "Не вдалося виділити пам'ять задля тимчасового розміщення множини!" << endl;
-		exit(0);
-	}
-
 	for (int i = 0; i < tempSize; i++)
 	{
 		_data[i] = temp._data[i];
 	}
-	return *this;
+	temp._currentSize = j;
+
+	return temp;
 }
 
 /*

@@ -51,9 +51,9 @@ int main()
 	cout << "Друга підмножина для утворення множини, що буде результатом перетину її з першою: ";
 	MyClass2.Print();
 	cout << endl;
-	MyClass1* MyClass2;
+	MyClass MyClass10(MyClass1 * MyClass2);
 	cout << "Множина, що є перетином двох підмножин: ";
-	MyClass1.Print();
+	MyClass10.Print();
 	cout << endl;
 
 	MyClass classWithoutData;
@@ -107,7 +107,8 @@ int main()
 	MyClass MyClass4("getterschecker", 14);
 	int currentSize4 = MyClass4.GetCurrentSize();
 	int maxSize4 = MyClass4.GetMaxSize();
-	char* data4 = MyClass4.GetData();
+	char* data4 = NULL;
+	MyClass4.GetData(data4);
 	cout << "Множина, яка зберігається в полі класу: {";
 	for (int i = 0; i < currentSize4; i++)
 	{

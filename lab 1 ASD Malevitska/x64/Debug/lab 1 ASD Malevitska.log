@@ -1,0 +1,9 @@
+﻿  lab 1 ASD Malevitska.cpp
+\\Mac\Home\Desktop\IT\С++\lab 1 ASD Malevitska\lab 1 ASD Malevitska.cpp(50,19): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+\\Mac\Home\Desktop\IT\С++\lab 1 ASD Malevitska\lab 1 ASD Malevitska.cpp(42,9): warning C4101: flag: неиспользованная локальная переменная
+\\Mac\Home\Desktop\IT\С++\lab 1 ASD Malevitska\lab 1 ASD Malevitska.cpp(443,29): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+\\Mac\Home\Desktop\IT\С++\lab 1 ASD Malevitska\lab 1 ASD Malevitska.cpp(476,29): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+\\Mac\Home\Desktop\IT\С++\lab 1 ASD Malevitska\lab 1 ASD Malevitska.cpp(487,32): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+\\Mac\Home\Desktop\IT\С++\lab 1 ASD Malevitska\lab 1 ASD Malevitska.cpp(522,11): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+\\Mac\Home\Desktop\IT\С++\lab 1 ASD Malevitska\lab 1 ASD Malevitska.cpp(523,11): warning C4244: инициализация: преобразование "double" в "int", возможна потеря данных
+  lab 1 ASD Malevitska.vcxproj -> \\Mac\Home\Desktop\IT\С++\lab 1 ASD Malevitska\x64\Debug\lab 1 ASD Malevitska.exe
