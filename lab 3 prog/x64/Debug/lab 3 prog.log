@@ -1,2 +1,9 @@
-﻿  lab 3 prog.cpp
+﻿  Department.cpp
+  Firm.cpp
+\\Mac\Home\Desktop\IT\С++\lab 3 prog\Firm.cpp(81,22): warning C4267: return: преобразование из "size_t" в "int"; возможна потеря данных
+  Professions.cpp
+\\Mac\Home\Desktop\IT\С++\lab 3 prog\Professions.cpp(175,6): warning C4804: >: небезопасное использование типа "bool" в операции
+\\Mac\Home\Desktop\IT\С++\lab 3 prog\Professions.cpp(175,35): warning C4804: <: небезопасное использование типа "bool" в операции
+  lab 3 prog.cpp
+  Создание кода...
   lab 3 prog.vcxproj -> \\Mac\Home\Desktop\IT\С++\lab 3 prog\x64\Debug\lab 3 prog.exe

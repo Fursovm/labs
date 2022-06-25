@@ -18,6 +18,7 @@ public: //компоненти класу, до яких наданий публічний доступ
 	int GetExperience(); //геттер для стажу роботи
 	double GetPayment(); //геттер для зарплатні
 	bool GetWorkingPlace(); //геттер для місця роботи
+	virtual int GetNum();
 	void Set(string name, string profession, int age, int work_experience, double payment, bool workingPlace); //сеттер для всіх полів
 	void SetName(string name); //геттер для імені
 	void SetProfession(string profession); //сеттер для професії
@@ -25,7 +26,8 @@ public: //компоненти класу, до яких наданий публічний доступ
 	void SetExperience(int work_experience); //сеттер для стажу роботи
 	void SetPayment(double payment); //сеттер для зарплатні
 	void SetWorkingPlace(bool workingPlace); //сеттер для місця роботи
-	virtual void Show() = 0;
+	virtual void Show();
+	Worker ComparePayment(const Worker& worker);
 	virtual ~Worker(); //деструктор за замовчуванням
 protected: //компоненти класу, до яких захищений доступ
 	string _name; //ім'я робітника

@@ -13,7 +13,7 @@ using namespace std;
 Worker::Worker()
 {
 #ifdef DEBUG //якщо ми ідентифікували DEBUG, то виконується все до #endif та після нього 
-    cout << "Викликався конструктор без параметрів класу Employee - " << this << endl << endl;
+    cout << "Викликався конструктор без параметрів класу Worker - " << this << endl << endl;
 #endif 
     _name = "Невідомо";
     _workExperience = 0;
@@ -35,7 +35,7 @@ Worker::Worker()
 Worker::Worker(string name, string profession, int age, int workExperience, double payment, bool workingPlace)
 {
 #ifdef DEBUG //якщо ми ідентифікували DEBUG, то виконується все до рядку #endif та після нього
-    cout << "Викликався конструктор з параметрами класу Employee - " << this << endl << endl;
+    cout << "Викликався конструктор з параметрами класу Worker - " << this << endl << endl;
 #endif
     Set(name, profession, age, workExperience, payment, workingPlace);
 }
@@ -49,7 +49,7 @@ Worker::Worker(string name, string profession, int age, int workExperience, doub
 Worker::Worker(const Worker& other)
 {
 #ifdef DEBUG //якщо ми ідентифікували DEBUG, то виконується все до #endif і далі 
-    cout << "Викликався конструктор копіювання класу Employee - " << this << endl << endl;
+    cout << "Викликався конструктор копіювання класу Worker - " << this << endl << endl;
 #endif 
     Set(other._name, other._profession, other._age, other._workExperience, other._payment, other._workingPlace);
 }
@@ -118,6 +118,11 @@ double Worker::GetPayment()
 bool Worker::GetWorkingPlace()
 {
     return _workingPlace;
+}
+
+int Worker::GetNum()
+{
+    return NULL;
 }
 
 /*
@@ -229,4 +234,34 @@ Worker::~Worker()
 #ifdef DEBUG //якщо ми ідентифікували DEBUG, то виконується все до та після #endif 
     cout << "Викликався деструктор класу Employee - " << this << endl << endl;
 #endif 
+}
+
+void Worker::Show()
+{
+    cout << "\nІм'я: " << _name << endl;
+    cout << "Вік: " << _age << endl;
+    cout << "Робочий стаж: " << _workExperience << endl;
+    cout << "Зарплатня: " << _payment << " грн/місяць" << endl;
+    if (_workingPlace == true)
+    {
+        cout << "Місце роботи: в офісі" << endl;
+    }
+    else
+    {
+        cout << "Місце роботи: вдома" << endl;
+    }
+}
+
+Worker Worker::ComparePayment(const Worker& worker)
+{
+    if (this->_payment >= worker._payment)
+    {
+        cout << this->_name << " заробляє більше ніж " << worker._name << endl;
+        return *this;
+    }
+    else
+    {
+        cout << worker._name << " заробляє більше ніж " << this->_name << endl;
+        return worker;
+    }
 }

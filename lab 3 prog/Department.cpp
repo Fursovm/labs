@@ -255,7 +255,7 @@ vector<T> Department::GetWorkersByProf(vector<T>& vector, string profession)
         if (_workers.at(j)->GetProfession() == profession)
         {
             T AA;
-            AA.Set(_workers.at(j)->GetName(), _workers.at(j)->GetProfession(), _workers.at(j)->GetAge(), _workers.at(j)->GetExperience(), _workers.at(j)->GetPayment(), _workers.at(j)->GetWorkingPlace());
+            AA.Set(_workers.at(j)->GetName(), _workers.at(j)->GetProfession(), _workers.at(j)->GetAge(), _workers.at(j)->GetExperience(), _workers.at(j)->GetPayment(), _workers.at(j)->GetWorkingPlace(), _workers.at(j)->GetNum());
             vector.emplace_back(AA);
         }
     }
